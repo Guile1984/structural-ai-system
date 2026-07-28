@@ -1,0 +1,29 @@
+# Ambiente virtual
+.venv/
+__pycache__/
+*.pyc 
+*.pyo
+
+
+# Artefatos ML
+ml/artifacts/*.pkl
+
+
+# Dados sensíveis
+.env
+data/elements.json
+
+
+# Relatórios gerados
+reports/
+
+
+# VS Code
+.vscode/settings.json
+
+
+# Sistema
+.DS_Store
+Thumbs.db
+
+

@@ -272,9 +272,9 @@ class Column(StructuralElement):
             Dicionário com os dados do pilar.
         """
         return {
-            "type": Column,
+            "type": "Column",
             "material": self._material,
-            "heigth": self._length,
+            "height": self._length,
             "section": self._section,
             "volume": self.calculate_volume(),
             "mass_kg": round(self.calculate_mass(), 2),

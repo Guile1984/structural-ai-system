@@ -38,7 +38,7 @@ class UnsupportedMaterialError(StructuralError):
         material: Nome do material não suportado.
     """
 
-    def __ini__(self, material: str) -> None:
+    def __init__(self, material: str) -> None:
         """Inicializa o erro com material inválido.
 
         Args:
@@ -78,7 +78,7 @@ class ElementNotFoundError(StructuralError):
         element_id: ID do elemento não encontrado.
     """
 
-    def __ini__(self, element_id: int) -> None:
+    def __init__(self, element_id: int) -> None:
         """Inicializa o erro com o ID não encontrado.
 
         Args:

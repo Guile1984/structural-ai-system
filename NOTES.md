@@ -1,6 +1,21 @@
 # Notas do projeto
 
-Registro de decisões pendentes e descobertas que não cabem no código.
+Registro de decisões pendentes, descobertas e rotinas que não cabem no código.
+
+---
+
+## Rotina de verificação ao fim de cada sprint
+
+1. `ruff check --output-format=concise .` — varredura completa
+2. `ruff check --fix .` — aplica correções seguras
+3. `python -c "import core, api"` — confirma que nada quebrou
+4. Analisar os apontamentos restantes: são hipóteses, não fatos.
+   Verificar antes de corrigir.
+5. Registrar aqui o que for adiado; commitar.
+
+Apontamento de ferramenta automática nunca é corrigido sem verificação
+prévia. Na varredura inicial deste projeto, dois de três "bugs críticos"
+apontados pelo `/init` não existiam.
 
 ---
 
@@ -47,10 +62,66 @@ A exceção adequada já existe: `UnsupportedElementTypeError`.
 
 ---
 
-**Status geral:** ambas as decisões adiadas. Prioridade atual é
-concluir `train_regression()` em `ml/pipeline.py`.
+## [PENDENTE] `eq-without-hash` em `core/elements.py`
 
-**Nota:** `ml/pipeline.py` está fora do alcance do Ruff (linter e
-formatador) enquanto `train_regression()` estiver incompleta —
-arquivo com sintaxe inválida não pode ser analisado. Rodar
-`ruff format ml/pipeline.py` assim que a função for concluída.
+`StructuralElement` define `__eq__` sem definir `__hash__`. Em Python,
+isso torna as instâncias não-hasheáveis: não podem entrar em `set` nem
+servir de chave de `dict`.
+
+Decidir se a igualdade estrutural faz sentido para o domínio. Se sim,
+implementar `__hash__` coerente com o `__eq__`. Se elementos são sempre
+distintos por identidade, talvez o `__eq__` é que esteja sobrando.
+
+---
+
+## [PENDENTE] `subprocess.run` sem `check` em `main.py`
+
+`subprocess.run(["streamlit", "run", ...])` não passa o argumento
+`check`. Se o Streamlit falhar ao iniciar, o programa segue como se
+tudo tivesse dado certo, sem sinalizar nada ao usuário.
+
+Decidir entre `check=True` (levanta exceção em caso de falha) ou
+`check=False` explícito (documenta que o retorno é ignorado de
+propósito).
+
+---
+
+## [PENDENTE] `os.getenv` com padrão numérico em `run_api.py`
+
+`int(os.getenv("FLASK_PORT", 5000))` — o padrão é `int`, mas
+`os.getenv` retorna `str`. Funciona porque `int()` aceita ambos, mas o
+tipo é inconsistente. Correção: `os.getenv("FLASK_PORT", "5000")`.
+
+---
+
+## [PENDENTE] `try` extenso em `create_element()` (`api/routes.py`)
+
+O bloco `try` envolve 7 instruções. Quanto mais amplo o `try`, menos
+preciso o diagnóstico: o `except Exception` captura qualquer falha das
+sete, incluindo erro de escrita em disco, e devolve tudo como 400.
+
+Avaliar reduzir o escopo do `try` ao que realmente pode falhar por dado
+inválido, tratando erros de I/O separadamente.
+
+---
+
+## [ACEITO] Import no meio de `teste_core.py`
+
+`module-import-not-at-top-of-file` na linha 31. É script exploratório de
+teste manual, não código de produção. Sem correção prevista — se
+incomodar nas varreduras, silenciar via `per-file-ignores` no
+`pyproject.toml`.
+
+---
+
+## Limitação atual do Ruff
+
+`ml/pipeline.py` está fora do alcance do linter e do formatador
+enquanto `train_regression()` estiver incompleta — arquivo com sintaxe
+inválida não pode ser analisado. Rodar `ruff format ml/pipeline.py`
+assim que a função for concluída.
+
+---
+
+**Status geral:** todas as decisões adiadas. Prioridade é concluir
+`train_regression()` em `ml/pipeline.py`.

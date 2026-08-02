@@ -6,7 +6,6 @@ Autor: Guilherme
 Versão: 1.0.0
 """
 
-import sys
 import argparse
 
 
@@ -52,7 +51,7 @@ def main() -> None:
 
     else:
         parser.print_help()
-        
+
 
 if __name__ == "__main__":
     main()

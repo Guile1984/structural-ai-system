@@ -5,22 +5,21 @@ Expõe as classes e funções principais do domínio
 """
 
 
-from core.elements import Beam, Column, Slab, Footing, StructuralElement
-from core.exceptions import (
-    StructuralError,
-    InvalidDimensionError,
-    UnsupportedMaterialError,
-    UnsupportedElementTypeError,
-    ElementNotFoundError
-)
 from core.calculator import (
-    total_volume,
-    total_mass,
-    total_load,
     heaviest_element,
-    structural_summary
+    structural_summary,
+    total_load,
+    total_mass,
+    total_volume,
 )
-
+from core.elements import Beam, Column, Footing, Slab, StructuralElement
+from core.exceptions import (
+    ElementNotFoundError,
+    InvalidDimensionError,
+    StructuralError,
+    UnsupportedElementTypeError,
+    UnsupportedMaterialError,
+)
 
 __all__ = [
     "Beam", "Column", "Slab", "Footing", "StructuralElement",

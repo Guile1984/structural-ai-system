@@ -5,12 +5,14 @@ Descrição: Validação rápida da camada de domínio
 
 
 from core import (
-    Beam, Column, Slab, Footing,
-    structural_summary,
+    Beam,
+    Column,
+    Footing,
     InvalidDimensionError,
+    Slab,
     UnsupportedMaterialError,
+    structural_summary,
 )
-
 
 print("=== TESTANDO CAMADA DE DOMÍNIO ===\n")
 
@@ -28,6 +30,7 @@ for e in elements:
 
 print("\n=== TO_DICT (Beam) ===")
 import json
+
 print(json.dumps(beam.to_dict(), indent=2))
 
 print("\n=== FROM_DICT ===")

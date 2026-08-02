@@ -1,0 +1,11 @@
+[tool.ruff]
+line-length = 100
+target-version = "py313"
+exclude = [".venv", "__pycache__", "build", "dist"]
+
+[tool.ruff.lint]
+preview = true
+select = ["E", "F", "W", "I", "B", "UP", "PL"]
+
+[tool.ruff.format]
+quote-style = "double"

@@ -6,13 +6,18 @@ Descrição: Rotas e controllers da API REST estrutural
 import json
 from datetime import datetime
 from pathlib import Path
-from flask import Blueprint, request, jsonify
-from core import (
-    Beam, Column, Slab, Footing,
-    StructuralElement, ElementNotFoundError,
-    structural_summary
-)
+
+from flask import Blueprint, jsonify, request
+
 from api.validators import validate_element
+from core import (
+    Beam,
+    Column,
+    Footing,
+    Slab,
+    StructuralElement,
+    structural_summary,
+)
 
 api_bp = Blueprint("api", __name__, url_prefix="/api/v1")
 

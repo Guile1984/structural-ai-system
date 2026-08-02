@@ -5,10 +5,11 @@ Descrição: Classes de elementos estruturais do domínio
 
 
 from __future__ import annotations
+
 from core.exceptions import (
     InvalidDimensionError,
+    UnsupportedElementTypeError,
     UnsupportedMaterialError,
-    UnsupportedElementTypeError
 )
 
 
@@ -43,7 +44,7 @@ class StructuralElement:
             raise UnsupportedMaterialError(material)
         if length <= 0:
             raise InvalidDimensionError("length", length)
-        
+
         self._material = material
         self._length = length
 

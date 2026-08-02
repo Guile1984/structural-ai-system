@@ -86,4 +86,3 @@ class ElementNotFoundError(StructuralError):
         """
         self.element_id = element_id
         super().__init__(f"Element with id={element_id} not found.")
-

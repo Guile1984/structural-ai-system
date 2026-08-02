@@ -3,9 +3,10 @@ Módulo: api/__init__.py
 Descrição: Application Factory do Flask
 """
 
-from flask import Flask
-from dotenv import load_dotenv
 import os
+
+from dotenv import load_dotenv
+from flask import Flask
 
 load_dotenv()
 

@@ -5,7 +5,6 @@ Descrição: Validação de dados de entrada nas requisições da API
 
 from core.elements import StructuralElement
 
-
 VALID_TYPES = ["Beam", "Column", "Slab", "Footing"]
 VALID_MATERIALS = StructuralElement.SUPPORTED_MATERIALS
 REQUIRED_FIELDS: dict[str, list[str]] = {

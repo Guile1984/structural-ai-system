@@ -70,6 +70,11 @@ execução do teste). Na varredura inicial deste projeto, dois de três
 - Virtual environment expected at `.venv/`
 - Data persisted to `data/elements.json` (gitignored)
 
+## Ferramentas de qualidade
+
+- Ruff configurado em `pyproject.toml` (preview ativo, grupos E/F/W/I/B/UP/PL).
+- Rodar `ruff check .` antes de commitar.
+- Dependências de desenvolvimento em `requirements-dev.txt`.
 
 ## Método de trabalho com o Claude Code
 

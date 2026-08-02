@@ -3,8 +3,9 @@ Arquivo: run_api.py
 Descrição: Inicializa a API REST do sistema estrutural
 """
 
-from api import create_app
 import os
+
+from api import create_app
 
 if __name__ == "__main__":
     app = create_app()

@@ -16,7 +16,7 @@ from sklearn.metrics import (
 )
 
 
-ARTIFACTS_DIR= Path("ml/artifacts")
+ARTIFACTS_DIR = Path("ml/artifacts")
 DATA_DIR = Path("data")
 
 
@@ -28,7 +28,6 @@ def generate_dataset(n: int = 500) -> pd.DataFrame:
 
     Returns:
         DataFrame com elementos estruturais.
-    
     Nota:
         Em produção, os dados viriam de um banco de dados ou API externa.
         O dataset sintético simula esse cenário de forma controlada.

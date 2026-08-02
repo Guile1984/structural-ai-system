@@ -24,11 +24,7 @@ api_bp = Blueprint("api", __name__, url_prefix="/api/v1")
 DATA_FILE = Path("data/elements.json")
 
 
-def _response(
-    data: dict | list | None = None,
-    error: str | None = None,
-    status: int = 200
-):
+def _response(data: dict | list | None = None, error: str | None = None, status: int = 200):
     """Gera resposta JSON padronizada.
 
     Args:
@@ -39,12 +35,14 @@ def _response(
     Returns:
         Tupla com JSON e status.
     """
-    return jsonify({
-        "success": error is None,
-        "data": data,
-        "error": error,
-        "timestamp": datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-    }), status
+    return jsonify(
+        {
+            "success": error is None,
+            "data": data,
+            "error": error,
+            "timestamp": datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
+        }
+    ), status
 
 
 def _load_elements() -> list[dict]:
@@ -66,10 +64,7 @@ def _save_elements(elements: list[dict]) -> None:
         elements: Lista de dicionários a salvar.
     """
     DATA_FILE.parent.mkdir(parents=True, exist_ok=True)
-    DATA_FILE.write_text(
-        json.dumps(elements, indent=4, ensure_ascii=False),
-        encoding="utf-8"
-    )
+    DATA_FILE.write_text(json.dumps(elements, indent=4, ensure_ascii=False), encoding="utf-8")
 
 
 def _build_element(data: dict) -> StructuralElement:
@@ -101,12 +96,14 @@ def health():
         JSON com informações do sistema.
     """
     elements = _load_elements()
-    return _response(data={
-        "status": "online",
-        "version": "1.0.0",
-        "project": "structural-ai-system",
-        "total_elements": len(elements)
-    })
+    return _response(
+        data={
+            "status": "online",
+            "version": "1.0.0",
+            "project": "structural-ai-system",
+            "total_elements": len(elements),
+        }
+    )
 
 
 @api_bp.route("/elements", methods=["GET"])
@@ -117,10 +114,7 @@ def list_elements():
         JSON com lista e total de elementos.
     """
     elements = _load_elements()
-    return _response(data={
-        "total": len(elements),
-        "elements": elements
-    })
+    return _response(data={"total": len(elements), "elements": elements})
 
 
 @api_bp.route("/elements/<int:element_id>", methods=["GET"])
@@ -137,10 +131,7 @@ def get_element(element_id: int):
     for element in elements:
         if element.get("id") == element_id:
             return _response(data=element)
-    return _response(
-        error=f"Element with id={element_id} not found.",
-        status=404
-    )
+    return _response(error=f"Element with id={element_id} not found.", status=404)
 
 
 @api_bp.route("/elements/type/<string:element_type>", methods=["GET"])
@@ -154,15 +145,8 @@ def filter_by_type(element_type: str):
         JSON com elementos filtrados.
     """
     elements = _load_elements()
-    filtered = [
-        e for e in elements
-        if e.get("type", "").lower() == element_type.lower()
-    ]
-    return _response(data={
-        "type": element_type,
-        "total": len(filtered),
-        "elements": filtered
-    })
+    filtered = [e for e in elements if e.get("type", "").lower() == element_type.lower()]
+    return _response(data={"type": element_type, "total": len(filtered), "elements": filtered})
 
 
 @api_bp.route("/elements", methods=["POST"])
@@ -205,13 +189,8 @@ def delete_element(element_id: int):
         if element.get("id") == element_id:
             elements.remove(element)
             _save_elements(elements)
-            return _response(data={
-                "message": f"Element {element_id} deleted successfully."
-            })
-    return _response(
-        error=f"Element with id={element_id} not found.",
-        status=404
-    )
+            return _response(data={"message": f"Element {element_id} deleted successfully."})
+    return _response(error=f"Element with id={element_id} not found.", status=404)
 
 
 @api_bp.route("/summary", methods=["GET"])
@@ -223,10 +202,7 @@ def get_summary():
     """
     raw = _load_elements()
     if not raw:
-        return _response(
-            error="No elements registered.",
-            status=404
-        )
+        return _response(error="No elements registered.", status=404)
 
     elements = [_build_element(e) for e in raw]
     summary = structural_summary(elements)

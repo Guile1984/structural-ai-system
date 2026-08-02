@@ -9,3 +9,7 @@ select = ["E", "F", "W", "I", "B", "UP", "PL"]
 
 [tool.ruff.format]
 quote-style = "double"
+
+[tool.ruff.lint.per-file-ignores]
+"main.py" = ["PLC0415"]
+"api/__init__.py" = ["PLC0415"]

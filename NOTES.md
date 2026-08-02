@@ -49,3 +49,8 @@ A exceção adequada já existe: `UnsupportedElementTypeError`.
 
 **Status geral:** ambas as decisões adiadas. Prioridade atual é
 concluir `train_regression()` em `ml/pipeline.py`.
+
+**Nota:** `ml/pipeline.py` está fora do alcance do Ruff (linter e
+formatador) enquanto `train_regression()` estiver incompleta —
+arquivo com sintaxe inválida não pode ser analisado. Rodar
+`ruff format ml/pipeline.py` assim que a função for concluída.

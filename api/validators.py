@@ -8,10 +8,10 @@ from core.elements import StructuralElement
 VALID_TYPES = ["Beam", "Column", "Slab", "Footing"]
 VALID_MATERIALS = StructuralElement.SUPPORTED_MATERIALS
 REQUIRED_FIELDS: dict[str, list[str]] = {
-    "Beam":    ["length", "width", "height", "material"],
-    "Column":  ["height", "section", "material"],
-    "Slab":    ["length", "width", "thickness", "material"],
-    "Footing": ["length", "width", "depth", "material"]
+    "Beam": ["length", "width", "height", "material"],
+    "Column": ["height", "section", "material"],
+    "Slab": ["length", "width", "thickness", "material"],
+    "Footing": ["length", "width", "depth", "material"],
 }
 
 
@@ -35,20 +35,14 @@ def validate_element(data: dict) -> list[str]:
         return errors
 
     if element_type not in VALID_TYPES:
-        errors.append(
-            f"Invalid type '{element_type}'. "
-            f"Valid types: {VALID_TYPES}"
-        )
+        errors.append(f"Invalid type '{element_type}'. Valid types: {VALID_TYPES}")
         return errors
 
     material = data.get("material")
     if not material:
         errors.append("Field 'material' is required.")
     elif material not in VALID_MATERIALS:
-        errors.append(
-            f"Invalid material '{material}'. "
-            f"Valid materials: {VALID_MATERIALS}"
-        )
+        errors.append(f"Invalid material '{material}'. Valid materials: {VALID_MATERIALS}")
 
     required = REQUIRED_FIELDS[element_type]
     for field in required:

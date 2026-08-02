@@ -3,7 +3,6 @@ Arquivo: test_core.py
 Descrição: Validação rápida da camada de domínio
 """
 
-
 from core import (
     Beam,
     Column,

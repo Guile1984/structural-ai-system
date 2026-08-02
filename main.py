@@ -30,23 +30,33 @@ def main() -> None:
 
     if args.api:
         print("Iniciando API REST...")
-        from api import create_app
+        from api import (
+            create_app,
+        )
+
         app = create_app()
         app.run(debug=True, port=5000)
 
     elif args.dashboard:
         print("Iniciando Dashboard...")
         import subprocess
+
         subprocess.run(["streamlit", "run", "dashboard/app.py"])
 
     elif args.train:
         print("Treinando modelos ML...")
-        from ml.pipeline import treinar_pipeline
+        from ml.pipeline import (
+            treinar_pipeline,
+        )
+
         treinar_pipeline()
 
     elif args.report:
         print("Gerando relatório...")
-        from automation.reporter import gerar_relatorio_manual
+        from automation.reporter import (
+            gerar_relatorio_manual,
+        )
+
         gerar_relatorio_manual()
 
     else:

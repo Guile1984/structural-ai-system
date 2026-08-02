@@ -6,6 +6,7 @@ Descrição: Exceções customizadas do domínio estrutural
 
 class StructuralError(Exception):
     """Classe base para errors do sistema estrutural."""
+
     pass
 
 
@@ -26,9 +27,7 @@ class InvalidDimensionError(StructuralError):
         """
         self.dimension = dimension
         self.value = value
-        super().__init__(
-            f"Invalid dimension - {dimension}: {value}. Must be positive."
-        )
+        super().__init__(f"Invalid dimension - {dimension}: {value}. Must be positive.")
 
 
 class UnsupportedMaterialError(StructuralError):
@@ -46,8 +45,7 @@ class UnsupportedMaterialError(StructuralError):
         """
         self.material = material
         super().__init__(
-            f"Unsupported material: '{material}'. "
-            f"Supported: concrete, steel, eng_wood"
+            f"Unsupported material: '{material}'. Supported: concrete, steel, eng_wood"
         )
 
 
@@ -66,8 +64,7 @@ class UnsupportedElementTypeError(StructuralError):
         """
         self.element_type = element_type
         super().__init__(
-            f"Unsupported element_type: '{element_type}'. "
-            f"Supported: Beam, Column, Slab, Footing"
+            f"Unsupported element_type: '{element_type}'. Supported: Beam, Column, Slab, Footing"
         )
 
 

@@ -3,7 +3,6 @@ Módulo: core/calculator.py
 Descrição: Funções de cálculo estrutural do domínio
 """
 
-
 from core.elements import StructuralElement
 
 
@@ -57,9 +56,7 @@ def heaviest_element(elements: list[StructuralElement]) -> StructuralElement | N
     return max(elements, key=lambda e: e.calculate_mass())
 
 
-def elements_by_material(
-        elements: list[StructuralElement]
-) -> dict[str, list[StructuralElement]]:
+def elements_by_material(elements: list[StructuralElement]) -> dict[str, list[StructuralElement]]:
     """Agrupa elementos por material.
 
     Args:
@@ -98,10 +95,6 @@ def structural_summary(elements: list[StructuralElement]) -> dict:
         "total_load_n": total_load(elements),
         "total_load_kn": round(total_load(elements) / 1000, 2),
         "heaviest_element": str(heaviest) if heaviest else None,
-        "by_material": {
-            mat: len(elems) for mat, elems in by_material.items()
-        },
-        "average_volume_m³": round(
-            total_volume(elements) / len(elements), 4
-        )
+        "by_material": {mat: len(elems) for mat, elems in by_material.items()},
+        "average_volume_m³": round(total_volume(elements) / len(elements), 4),
     }

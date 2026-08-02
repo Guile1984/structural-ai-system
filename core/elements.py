@@ -3,7 +3,6 @@ Módulo: core/elements.py
 Descrição: Classes de elementos estruturais do domínio
 """
 
-
 from __future__ import annotations
 
 from core.exceptions import (
@@ -23,11 +22,7 @@ class StructuralElement:
     """
 
     SUPPORTED_MATERIALS: list[str] = ["concrete", "steel", "eng_wood"]
-    DENSITY: dict[str, float] = {
-        "concrete": 2500.0,
-        "steel": 7850.0,
-        "eng_wood": 600.0
-    }
+    DENSITY: dict[str, float] = {"concrete": 2500.0, "steel": 7850.0, "eng_wood": 600.0}
 
     def __init__(self, material: str, length: float) -> None:
         """Inicializa um elemento estrutural.
@@ -84,7 +79,7 @@ class StructuralElement:
 
         Args:
             gravity: Aceleração gravitacional em m/s². Padrão: 9.81.
-        
+
         Returns:
             Carga em Newtons.
         """
@@ -104,7 +99,7 @@ class StructuralElement:
 
         Args:
             data: Dicionário com os dados do elemento.
-        
+
         Returns:
             Instância do elemento reconstruído.
 
@@ -113,24 +108,13 @@ class StructuralElement:
         """
         element_type = data.get("type")
         if element_type == "Beam":
-            return Beam(
-                data["length"], data["width"],
-                data["height"], data["material"]
-            )
+            return Beam(data["length"], data["width"], data["height"], data["material"])
         elif element_type == "Column":
-            return Column(
-                data["height"], data["section"], data["material"]
-            )
+            return Column(data["height"], data["section"], data["material"])
         elif element_type == "Slab":
-            return Slab(
-                data["length"], data["width"],
-                data["thickness"], data["material"]
-            )
+            return Slab(data["length"], data["width"], data["thickness"], data["material"])
         elif element_type == "Footing":
-            return Footing(
-                data["length"], data["width"],
-                data["depth", data["material"]]
-            )
+            return Footing(data["length"], data["width"], data["depth", data["material"]])
         else:
             raise UnsupportedElementTypeError(element_type)
 
@@ -157,11 +141,7 @@ class Beam(StructuralElement):
     """
 
     def __init__(
-            self,
-            length: float,
-            width: float,
-            height: float,
-            material: str = "concrete"
+        self, length: float, width: float, height: float, material: str = "concrete"
     ) -> None:
         """Inicializa uma viga estrutural.
 
@@ -214,7 +194,7 @@ class Beam(StructuralElement):
             "height": self._height,
             "volume": self.calculate_volume(),
             "mass_kg": round(self.calculate_mass(), 2),
-            "load_n": round(self.calculate_load(), 2)
+            "load_n": round(self.calculate_load(), 2),
         }
 
     def __str__(self) -> str:
@@ -232,12 +212,7 @@ class Column(StructuralElement):
         _section: Lado da seção quadrada em metros.
     """
 
-    def __init__(
-            self,
-            height: float,
-            section: float,
-            material: str = "concrete"
-    ) -> None:
+    def __init__(self, height: float, section: float, material: str = "concrete") -> None:
         """Inicializa um pilar estrutural.
 
         Args:
@@ -264,7 +239,7 @@ class Column(StructuralElement):
         Returns:
             Volume em metros cúbicos.
         """
-        return round(self._length * self._section ** 2, 4)
+        return round(self._length * self._section**2, 4)
 
     def to_dict(self) -> dict:
         """Serializa o pilar para dicionário.
@@ -279,7 +254,7 @@ class Column(StructuralElement):
             "section": self._section,
             "volume": self.calculate_volume(),
             "mass_kg": round(self.calculate_mass(), 2),
-            "load_n": round(self.calculate_load(), 2)
+            "load_n": round(self.calculate_load(), 2),
         }
 
     def __str__(self) -> str:
@@ -299,11 +274,7 @@ class Slab(StructuralElement):
     """
 
     def __init__(
-            self,
-            length: float,
-            width: float,
-            thickness: float,
-            material: str = "concrete"
+        self, length: float, width: float, thickness: float, material: str = "concrete"
     ) -> None:
         """Inicializa uma laje estrutural.
 
@@ -356,7 +327,7 @@ class Slab(StructuralElement):
             "thickness": self._thickness,
             "volume": self.calculate_volume(),
             "mass_kg": round(self.calculate_mass(), 2),
-            "load_n": round(self.calculate_load(), 2)
+            "load_n": round(self.calculate_load(), 2),
         }
 
     def __str__(self) -> str:
@@ -376,11 +347,7 @@ class Footing(StructuralElement):
     """
 
     def __init__(
-            self,
-            length: float,
-            width: float,
-            depth: float,
-            material: str = "concrete"
+        self, length: float, width: float, depth: float, material: str = "concrete"
     ) -> None:
         """Inicializa uma sapata estrutural.
 
@@ -391,7 +358,7 @@ class Footing(StructuralElement):
             material: Material da sapata. Padrão: concrete.
 
         Raises:
-            InvalidDimensionError: Se alguma dimensão for inválida. 
+            InvalidDimensionError: Se alguma dimensão for inválida.
         """
         super().__init__(material, length)
         if width <= 0:
@@ -433,7 +400,7 @@ class Footing(StructuralElement):
             "depth": self._depth,
             "volume": self.calculate_volume(),
             "mass_kg": round(self.calculate_mass(), 2),
-            "load_n": round(self.calculate_load(), 2)
+            "load_n": round(self.calculate_load(), 2),
         }
 
     def __str__(self) -> str:

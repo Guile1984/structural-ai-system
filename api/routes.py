@@ -19,6 +19,8 @@ from core import (
     structural_summary,
 )
 
+from ml import load_artifacts, predict_mass, predict_approval
+
 api_bp = Blueprint("api", __name__, url_prefix="/api/v1")
 
 DATA_FILE = Path("data/elements.json")
@@ -207,6 +209,97 @@ def get_summary():
     elements = [_build_element(e) for e in raw]
     summary = structural_summary(elements)
     return _response(data=summary)
+
+
+@api_bp.route("/predict/mass", methods=["POST"])
+def predict_element_mass():
+    """Prevê a massa de um elemento com ML.
+
+    Returns:
+        JSON com previsão de massa e metadados.
+    """
+    data = request.get_json()
+    if not data:
+        return _response(error="Request body is empty.", status=400)
+
+    required = ["type", "material", "length", "width", "height"]
+    for field in required:
+        if field not in data:
+            return _response(
+                error=f"Field '{field}' is required.",
+                status=400
+            )
+
+    try:
+        artifacts = load_artifacts()
+        result = predict_mass(
+            data["type"], data["material"],
+            float(data["length"]), float(data["width"]),
+            float(data["height"]),
+            artifacts
+        )
+        return _response(data=result)
+    except FileNotFoundError as e:
+        return _response(error=str(e), status=503)
+    except Exception as e:
+        return _response(error=str(e), status=400)
+
+
+@api_bp.route("/predict/approval", methods=["POST"])
+def predict_element_approval():
+    """Prevê se um elemento será aprovado com ML.
+
+    Returns:
+        JSON com previsão de aprovação e probabilidades.
+    """
+    data = request.get_json()
+    if not data:
+        return _response(error="Reques body is empty.", status=400)
+
+    required = ["type", "material", "length", "width", "height"]
+    for field in required:
+        if field not in data:
+            return _response(
+                error=f"Field '{field}' is required.",
+                status=400
+            )
+
+    try:
+        artifacts = load_artifacts()
+        result = predict_approval(
+            data["type"], data["material"],
+            float(data["length"]), float(data["width"]),
+            float(data["height"]),
+            artifacts
+        )
+        return _response(data=result)
+    except FileNotFoundError as e:
+        return _response(error=str(e), status=503)
+    except Exception as e:
+        return _response(error=str(e), status=400)
+
+
+@api_bp.route("/model/info", methods=["GET"])
+def model_info():
+    """Retorna informações e métricas dos modelos.
+
+    Returns:
+        JSON com métricas de regressão e classificação.
+    """
+    try:
+        artifacts = load_artifacts()
+        return _response(data={
+            "regression": {
+                "algorithm": "RandomForestRegressor",
+                "metrics": artifacts["model_regression"]["metrics"]
+            },
+            "classification": {
+                "algorithm": "RandomForestClassifier",
+                "metrics": artifacts["model_classification"]["metrics"]
+            }
+        })
+    except FileNotFoundError as e:
+        return _response(error=str(e), status=503)
 
 
 @api_bp.errorhandler(404)

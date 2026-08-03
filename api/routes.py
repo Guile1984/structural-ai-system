@@ -16,7 +16,9 @@ from core import (
     Footing,
     Slab,
     StructuralElement,
-    structural_summary,
+    structural_summary, 
+    UnsupportedElementTypeError,
+    ElementNotFoundError
 )
 
 from ml import load_artifacts, predict_mass, predict_approval
@@ -88,6 +90,8 @@ def _build_element(data: dict) -> StructuralElement:
         return Slab(data["length"], data["width"], data["thickness"], m)
     elif t == "Footing":
         return Footing(data["length"], data["width"], data["depth"], m)
+    else:
+        raise UnsupportedElementTypeError(t)
 
 
 @api_bp.route("/health", methods=["GET"])
@@ -133,7 +137,7 @@ def get_element(element_id: int):
     for element in elements:
         if element.get("id") == element_id:
             return _response(data=element)
-    return _response(error=f"Element with id={element_id} not found.", status=404)
+    raise ElementNotFoundError(element_id)
 
 
 @api_bp.route("/elements/type/<string:element_type>", methods=["GET"])
@@ -192,7 +196,7 @@ def delete_element(element_id: int):
             elements.remove(element)
             _save_elements(elements)
             return _response(data={"message": f"Element {element_id} deleted successfully."})
-    return _response(error=f"Element with id={element_id} not found.", status=404)
+    raise ElementNotFoundError(element_id)
 
 
 @api_bp.route("/summary", methods=["GET"])
@@ -232,12 +236,7 @@ def predict_element_mass():
 
     try:
         artifacts = load_artifacts()
-        result = predict_mass(
-            data["type"], data["material"],
-            float(data["length"]), float(data["width"]),
-            float(data["height"]),
-            artifacts
-        )
+        result = predict_mass(data, artifacts)
         return _response(data=result)
     except FileNotFoundError as e:
         return _response(error=str(e), status=503)
@@ -266,12 +265,7 @@ def predict_element_approval():
 
     try:
         artifacts = load_artifacts()
-        result = predict_approval(
-            data["type"], data["material"],
-            float(data["length"]), float(data["width"]),
-            float(data["height"]),
-            artifacts
-        )
+        result = predict_approval(data, artifacts)
         return _response(data=result)
     except FileNotFoundError as e:
         return _response(error=str(e), status=503)
@@ -312,3 +306,9 @@ def not_found(error):
 def method_not_allowed(error):
     """Trata métodos não permitidos."""
     return _response(error="Method not allowed.", status=405)
+
+
+@api_bp.errorhandler(ElementNotFoundError)
+def handle_element_not_found(error):
+    "Traduz exceção de domínio para HTTP 404."
+    return _response(error=str(error), status=404)

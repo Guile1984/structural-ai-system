@@ -42,6 +42,11 @@ mantém sincronizadas.
   HTTP 404. Origem única e respeita a separação de camadas (domínio
   decide o que é erro, API decide como comunicar).
 
+## [RESOLVIDO] Duplicação da mensagem "element not found"
+
+**Resolução:** Opção B implementada em 02/08/2026. API agora levanta
+`ElementNotFoundError` do domínio. Handler `@api_bp.errorhandler`
+traduz para HTTP 404. Origem única da mensagem.
 ---
 
 ## [PENDENTE] `_build_element()` sem tratamento de tipo desconhecido
@@ -60,6 +65,10 @@ para não quebrar, e nada no código expressa isso.
 
 A exceção adequada já existe: `UnsupportedElementTypeError`.
 
+## [RESOLVIDO] `_build_element()` sem tratamento de tipo desconhecido
+
+**Resolução:** `else` adicionado em 02/08/2026. Tipo desconhecido agora
+levanta `UnsupportedElementTypeError` explicitamente.
 ---
 
 ## [PENDENTE] `eq-without-hash` em `core/elements.py`
@@ -92,6 +101,9 @@ propósito).
 `os.getenv` retorna `str`. Funciona porque `int()` aceita ambos, mas o
 tipo é inconsistente. Correção: `os.getenv("FLASK_PORT", "5000")`.
 
+## [RESOLVIDO] `os.getenv` com padrão numérico em `run_api.py`
+
+**Resolução:** Corrigido em 02/08/2026. Padrão alterado para `"5000"` (string).
 ---
 
 ## [PENDENTE] `try` extenso em `create_element()` (`api/routes.py`)
@@ -121,6 +133,8 @@ enquanto `train_regression()` estiver incompleta — arquivo com sintaxe
 inválida não pode ser analisado. Rodar `ruff format ml/pipeline.py`
 assim que a função for concluída.
 
+**Resolução:** `train_regression()` concluída em 02/08/2026. `ruff check`
+e `ruff format` rodados com sucesso — All checks passed.
 ---
 
 **Status geral:** todas as decisões adiadas. Prioridade é concluir

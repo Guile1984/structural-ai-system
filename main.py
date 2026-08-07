@@ -41,7 +41,7 @@ def main() -> None:
         print("Iniciando Dashboard...")
         import subprocess
 
-        subprocess.run(["streamlit", "run", "dashboard/app.py"])
+        subprocess.run(["streamlit", "run", "dashboard/app.py"], check=False)
 
     elif args.train:
         print("Treinando modelos ML...")

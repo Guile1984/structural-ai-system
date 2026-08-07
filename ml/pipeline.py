@@ -290,7 +290,7 @@ def predict_approval(dimensions: dict, artifacts: dict) -> dict:
             "rejected": round(probabilities[0] * 100, 1),
             "approved": round(probabilities[1] * 100, 1),
         },
-        "model_accuracy": artifacts['model_classification']["metrics"]["accuracy"],
+        "model_accuracy": artifacts["model_classification"]["metrics"]["accuracy"],
     }
 
 

@@ -51,7 +51,7 @@ def validate_element(data: dict) -> list[str]:
         value = data.get(field)
         if value is None:
             errors.append(f"Field '{field}' is required for {element_type}.")
-        elif not isinstance(value, (int, float)):
+        elif not isinstance(value, (int | float)):
             errors.append(f"Field '{field}' must be a number.")
         elif value <= 0:
             errors.append(f"Field '{field}' must be positive.")

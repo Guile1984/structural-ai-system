@@ -13,15 +13,14 @@ from api.validators import validate_element
 from core import (
     Beam,
     Column,
+    ElementNotFoundError,
     Footing,
     Slab,
     StructuralElement,
-    structural_summary, 
     UnsupportedElementTypeError,
-    ElementNotFoundError
+    structural_summary,
 )
-
-from ml import load_artifacts, predict_mass, predict_approval
+from ml import load_artifacts, predict_approval, predict_mass
 
 api_bp = Blueprint("api", __name__, url_prefix="/api/v1")
 
@@ -167,7 +166,7 @@ def create_element():
     if errors:
         return _response(error=errors, status=400)
 
-    try:
+    try:  # noqa: PLW0717
         element = _build_element(data)
         elements = _load_elements()
         new_id = max((e.get("id", 0) for e in elements), default=0) + 1
@@ -229,10 +228,7 @@ def predict_element_mass():
     required = ["type", "material", "length", "width", "height"]
     for field in required:
         if field not in data:
-            return _response(
-                error=f"Field '{field}' is required.",
-                status=400
-            )
+            return _response(error=f"Field '{field}' is required.", status=400)
 
     try:
         artifacts = load_artifacts()
@@ -258,10 +254,7 @@ def predict_element_approval():
     required = ["type", "material", "length", "width", "height"]
     for field in required:
         if field not in data:
-            return _response(
-                error=f"Field '{field}' is required.",
-                status=400
-            )
+            return _response(error=f"Field '{field}' is required.", status=400)
 
     try:
         artifacts = load_artifacts()
@@ -282,16 +275,18 @@ def model_info():
     """
     try:
         artifacts = load_artifacts()
-        return _response(data={
-            "regression": {
-                "algorithm": "RandomForestRegressor",
-                "metrics": artifacts["model_regression"]["metrics"]
-            },
-            "classification": {
-                "algorithm": "RandomForestClassifier",
-                "metrics": artifacts["model_classification"]["metrics"]
+        return _response(
+            data={
+                "regression": {
+                    "algorithm": "RandomForestRegressor",
+                    "metrics": artifacts["model_regression"]["metrics"],
+                },
+                "classification": {
+                    "algorithm": "RandomForestClassifier",
+                    "metrics": artifacts["model_classification"]["metrics"],
+                },
             }
-        })
+        )
     except FileNotFoundError as e:
         return _response(error=str(e), status=503)
 

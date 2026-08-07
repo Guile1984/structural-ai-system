@@ -83,14 +83,14 @@ def structural_summary(elements: list[StructuralElement]) -> dict:
         Dicionário com resumo estatístico da estrutura.
     """
     if not elements:
-        return {"error:": "No elements provided."}
+        return {"error": "No elements provided."}
 
     by_material = elements_by_material(elements)
     heaviest = heaviest_element(elements)
 
     return {
         "total_elements": len(elements),
-        "total_volume_m³": total_volume(elements),
+        "total_volume_m3": total_volume(elements),
         "total_mass_kg": total_mass(elements),
         "total_load_n": total_load(elements),
         "total_load_kn": round(total_load(elements) / 1000, 2),

@@ -128,6 +128,8 @@ class StructuralElement:
             return False
         return self.calculate_volume() == other.calculate_volume()
 
+    __hash__ = None  # Unhashable by design — see NOTES.md
+
     def __repr__(self) -> str:
         return f"{self.__class__.__name__}(material={self._material})"
 

@@ -13,3 +13,4 @@ quote-style = "double"
 [tool.ruff.lint.per-file-ignores]
 "main.py" = ["PLC0415"]
 "api/__init__.py" = ["PLC0415"]
+"tests/*" = ["PLR6301", "PLR2004", "PLW0717", "PLC0415"]
